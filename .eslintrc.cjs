@@ -7,7 +7,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:vue/vue3-essential',
-    'plugin:perttier/recommended',
+    'plugin:prettier/recommended',
     'eslint-config-prettier'
   ],
   overrides: [],
@@ -21,6 +21,12 @@ module.exports = {
     requireConfigFile: false,
     parser: '@babel/eslint-parser'
   },
-  plugins: ['vue'],
+  plugins: ['vue', 'prettier'],
+  globals: {
+    defineProps: 'readonly',
+    defineEmits: 'readonly',
+    defineExpose: 'readonly',
+    withDefaults: 'readonly'
+  },
   rules: {}
 }
