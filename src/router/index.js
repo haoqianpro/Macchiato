@@ -1,6 +1,6 @@
+import Layout from '@/views/layout/index.vue'
+import Login from '@/views/login/index.vue'
 import { createRouter, createWebHistory } from 'vue-router'
-import Layout from '../pages/LayoutPage/index.vue'
-import Login from '../pages/LoginPage/index.vue'
 
 const routes = [
   {
@@ -13,13 +13,17 @@ const routes = [
     redirect: '/data',
     children: [
       {
-        path: '/layer',
-        component: () => import('../pages/LayerPage/index.vue')
+        path: '/report',
+        component: () => import('@/views/report/index.vue')
       },
-      { path: '/user', component: () => import('../pages/UserPage/index.vue') },
+      { path: '/user', component: () => import('@/views/user/index.vue') },
       {
         path: '/data',
-        component: () => import('../pages/DataPage/index.vue')
+        component: () => import('@/views/data/index.vue')
+      },
+      {
+        path: '/createReport',
+        component: () => import('@/views/report/createReport.vue')
       }
     ]
   },

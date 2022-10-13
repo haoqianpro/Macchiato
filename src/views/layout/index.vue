@@ -40,7 +40,7 @@ const menuItemList = reactive([
     name: '用户管理'
   },
   {
-    path: '/layer',
+    path: '/report',
     name: '报表页管理'
   }
 ])
