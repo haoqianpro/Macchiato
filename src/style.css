@@ -13,9 +13,4 @@ body,
 
 #app {
   display: flex;
-  flex-direction: column;
-}
-
-.wrapper {
-  flex: 1;
 }

@@ -1,34 +1,29 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import EndLayout from '../pages/LayoutPage/EndLayout.vue'
-import FrontLayout from '../pages/LayoutPage/FrontLayout.vue'
+import Layout from '../pages/LayoutPage/index.vue'
 import Login from '../pages/LoginPage/index.vue'
 
 const routes = [
   {
     path: '/',
-    component: FrontLayout,
+    redirect: '/login'
+  },
+  {
+    path: '/index',
+    component: Layout,
+    redirect: '/data',
     children: [
       {
         path: '/layer',
         component: () => import('../pages/LayerPage/index.vue')
+      },
+      { path: '/user', component: () => import('../pages/UserPage/index.vue') },
+      {
+        path: '/data',
+        component: () => import('../pages/DataPage/index.vue')
       }
     ]
   },
-  { path: '/login', component: Login },
-  {
-    path: '/admin',
-    component: EndLayout,
-    children: [
-      {
-        path: 'user',
-        component: () => import('../pages/UserPage/index.vue')
-      },
-      {
-        path: 'fundCode',
-        component: () => import('../pages/DataPage/FundCode.vue')
-      }
-    ]
-  }
+  { path: '/login', component: Login }
 ]
 
 const router = createRouter({

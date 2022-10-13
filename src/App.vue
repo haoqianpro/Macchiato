@@ -1,12 +1,7 @@
-<script setup>
-import NavHeader from './components/NavHeader.vue'
-</script>
+<script setup></script>
 
 <template>
-  <nav-header />
-  <div class="wrapper">
-    <router-view></router-view>
-  </div>
+  <router-view></router-view>
 </template>
 
 <style scoped></style>
