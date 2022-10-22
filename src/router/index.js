@@ -17,6 +17,7 @@ const routes = [
         component: () => import('@/views/report/index.vue')
       },
       { path: '/user', component: () => import('@/views/user/index.vue') },
+      { path: '/role', component: () => import('@/views/user/role.vue') },
       {
         path: '/data',
         component: () => import('@/views/data/index.vue')

@@ -10,16 +10,28 @@
           class="el-menu-vertical"
           :default-active="defaultActiveIndex"
         >
-          <el-menu-item
+          <el-sub-menu
             v-for="item in menuItemList"
             :key="item.path"
             :index="item.path"
-            >{{ item.name }}</el-menu-item
           >
+            <template #title>
+              <el-icon><component :is="item.icon" /></el-icon>
+              <span>{{ item.name }}</span>
+            </template>
+            <el-menu-item
+              v-for="menu in item.children"
+              :key="menu.path"
+              :index="menu.path"
+              >{{ menu.name }}</el-menu-item
+            >
+          </el-sub-menu>
         </el-menu>
       </el-aside>
       <el-main>
-        <router-view></router-view>
+        <div class="wrapper">
+          <router-view></router-view>
+        </div>
       </el-main>
     </el-container>
   </el-container>
@@ -32,16 +44,41 @@ import NavHeader from '../../components/NavHeader.vue'
 
 const menuItemList = reactive([
   {
-    path: '/data',
-    name: '数据管理'
+    icon: 'Grid',
+    path: '/sub-menu1',
+    name: '数据',
+    children: [
+      {
+        path: '/data',
+        name: '全国疫情数据'
+      }
+    ]
   },
   {
-    path: '/user',
-    name: '用户管理'
+    icon: 'Setting',
+    path: '/sub-menu2',
+    name: '管理',
+    children: [
+      {
+        path: '/user',
+        name: '用户管理'
+      },
+      {
+        path: '/role',
+        name: '角色管理'
+      }
+    ]
   },
   {
-    path: '/report',
-    name: '报表页管理'
+    icon: 'Memo',
+    path: '/sub-menu3',
+    name: '报表',
+    children: [
+      {
+        path: '/report',
+        name: '全国疫情数据概览'
+      }
+    ]
   }
 ])
 const route = useRoute()
@@ -51,11 +88,52 @@ const defaultActiveIndex = ref(route.path)
 
 <style scoped>
 .el-header {
-  border-bottom: 1px solid #dcdcdc;
+  /* border-bottom: 1px solid #dcdcdc; */
+  padding-left: 0;
 }
 
 .el-menu-vertical {
   width: 200px;
   height: 100%;
+}
+
+.el-menu {
+  padding-top: 16px;
+  background-color: #1e1e2d;
+}
+.el-menu >>> .el-menu-item,
+.el-menu >>> .el-sub-menu__title {
+  height: 40px;
+  font-size: 12px;
+  color: #9899ac;
+  background-color: #1e1e2d;
+}
+.el-menu >>> .el-sub-menu__title:hover {
+  background-color: #1b1b28;
+  color: #fff;
+}
+.el-menu-item {
+  background-color: #1e1e2d;
+}
+.el-menu-item:hover {
+  background-color: #1b1b28;
+  color: #fff;
+}
+.el-menu-item.is-active {
+  color: #fff;
+}
+.el-main {
+  background-color: rgba(245, 248, 250, 0.8);
+  /* background-color: #fff;
+  background-clip: content-box; */
+}
+.wrapper {
+  height: 100%;
+  padding: 5px;
+  background-color: #fff;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.el-sub-menu .el-menu-item {
+  min-width: 199px;
 }
 </style>

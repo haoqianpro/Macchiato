@@ -1,5 +1,6 @@
 <template>
   <div class="nav-header">
+    <div class="logo">Macchiato</div>
     <div class="avatar">
       <el-dropdown>
         <img :src="defaultAvatar" alt="avatar" />
@@ -20,9 +21,9 @@ import defaultAvatar from '../assets/default-avatar.gif'
 <style scoped>
 .nav-header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
-  height: 59px;
+  height: 60px;
   /* padding: 0 10px; */
   background-color: #fff;
   /* box-shadow: 0 0 4px rgba(0, 0, 0, 0.2); */
@@ -36,5 +37,15 @@ import defaultAvatar from '../assets/default-avatar.gif'
   width: 100%;
   height: 100%;
   border-radius: 5px;
+}
+.logo {
+  width: 199px;
+  height: 100%;
+  background-color: #1e1e2d;
+  font-size: 20px;
+  line-height: 60px;
+  color: #fff;
+  text-align: center;
+  font-family: 'Courier New', Courier, monospace;
 }
 </style>
