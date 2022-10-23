@@ -1,16 +1,20 @@
 <template>
   <div>
-    <header>
+    <header class="header">
       <el-form :inline="true" :model="queryConfig" class="demo-form-inline">
         <el-form-item label="姓名: ">
-          <el-input v-model="queryConfig.username" clearable />
+          <el-input
+            v-model="queryConfig.username"
+            clearable
+            @clear="clearName"
+          />
         </el-form-item>
-        <el-form-item label="手机号: ">
+        <!-- <el-form-item label="手机号: ">
           <el-input v-model="queryConfig.phone"></el-input>
         </el-form-item>
         <el-form-item label="角色: ">
           <el-input v-model="queryConfig.role"></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
           <el-button type="primary" @click="onSubmitQuery">查询</el-button>
           <el-button plain @click="onClear">重置</el-button>
@@ -30,9 +34,12 @@
         <el-table-column label="允许查看的报表" prop="report" />
         <el-table-column align="right">
           <template #default="scope">
-            <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
-              >编辑</el-button
+            <el-button
+              size="small"
+              @click="handleEdit(scope.$index, scope.row)"
             >
+              编辑
+            </el-button>
             <el-button
               size="small"
               type="danger"
@@ -106,7 +113,7 @@ import {
   getUserInfo,
   getRole,
   addUser,
-  deleteUser,
+  deleteUserInfo,
   editUser
 } from '../../api/user.js'
 // import { ElMessage } from 'element-plus'
@@ -142,11 +149,10 @@ let isEdit = ref(false)
 
 // 点击查询事件
 const onSubmitQuery = async () => {
-  console.log('进入到测试页面')
   const res = await getUserInfo(queryConfig)
   console.log(res)
-  if (res.status == 200) {
-    tableData.data = res.data.data
+  if (res.code == 200) {
+    tableData.data = res.data
   }
 }
 // 重置按钮事件
@@ -174,9 +180,9 @@ const handleDelete = (index, row) => {
 // 删除按钮弹框的确认事件
 const confirmDelete = async () => {
   // console.log(rowId.value)
-  const res = await deleteUser(rowId.value)
+  const res = await deleteUserInfo(rowId.value)
   console.log(res)
-  if (res.status == 200) {
+  if (res.code == 200) {
     getUserInfoList()
   }
   deleteMessageDialog.value = false
@@ -185,18 +191,18 @@ const confirmDelete = async () => {
 const getUserInfoList = async () => {
   const res = await getUserInfo()
   // console.log(res)
-  // console.log(typeof res.status)
-  if (res.status == 200) {
-    tableData.data = res.data.data
+  if (res.code == 200) {
+    tableData.data = res.data
   }
+  // console.log(tableData.data)
 }
 // 获取角色列表
 const getRoleList = async () => {
   const res = await getRole()
-  // console.log('获取角色列表', res)
+  console.log('获取角色列表', res)
   let newArr = []
-  if (res.status == 200) {
-    res.data.data.forEach(el => {
+  if (res.code == 200) {
+    res.data.forEach(el => {
       newArr.push(el.name)
     })
     newRoleList.list = newArr
@@ -214,7 +220,7 @@ const handleAddSubmit = async () => {
   // 新增用户：
   if (isEdit.value == false) {
     let res = await addUser(userData.value)
-    if (res.status == 200) {
+    if (res.code == 200) {
       // ElMessage.success('新增用户成功!')
       console.log('新增用户成功')
     }
@@ -222,8 +228,8 @@ const handleAddSubmit = async () => {
   // 编辑用户：
   if (isEdit.value == true) {
     const res = await editUser(userData.value)
-    // console.log(res)
-    if (res.status == 200) {
+    console.log(res)
+    if (res.code == 200) {
       // ElMessage.success('编辑用户成功!')
       console.log('编辑用户成功')
     }
@@ -239,8 +245,14 @@ const handleAddSubmit = async () => {
   // 更新用户列表
   getUserInfoList()
 }
+const clearName = () => {
+  onClear()
+}
 </script>
 <style scoped>
+.header {
+  margin-top: 10px;
+}
 .btn {
   padding-top: 10px;
   padding-bottom: 10px;
