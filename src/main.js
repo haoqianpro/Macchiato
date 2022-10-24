@@ -1,5 +1,6 @@
 import '@/styles/index.scss'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import 'element-plus/theme-chalk/src/message.scss'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
