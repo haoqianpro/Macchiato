@@ -3,7 +3,8 @@ import getters from './getters'
 export default createStore({
   state() {
     return {
-      user: null
+      user: null,
+      token: null
     }
   },
   mutations: {
@@ -12,6 +13,16 @@ export default createStore({
     },
     REMOVE_USER: state => {
       state.user = null
+    },
+    SET_TOKEN: (state, token) => {
+      state.token = token
+    },
+    REMOVE_TOKEN: state => {
+      state.token = null
+    },
+    LOGOUT: () => {
+      this.REMOVE_USER()
+      this.REMOVE_TOKEN()
     }
   },
   getters

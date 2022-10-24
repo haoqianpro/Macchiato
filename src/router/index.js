@@ -13,18 +13,14 @@ const routes = [
     redirect: '/data',
     children: [
       {
-        path: '/report',
-        component: () => import('@/views/report/index.vue')
+        path: '/countrywide-overview',
+        component: () => import('@/views/report/covid.vue')
       },
       { path: '/user', component: () => import('@/views/user/index.vue') },
       { path: '/role', component: () => import('@/views/user/role.vue') },
       {
         path: '/data',
         component: () => import('@/views/data/index.vue')
-      },
-      {
-        path: '/createReport',
-        component: () => import('@/views/report/createReport.vue')
       }
     ]
   },

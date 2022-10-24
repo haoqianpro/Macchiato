@@ -75,7 +75,7 @@ const menuItemList = reactive([
     name: '报表',
     children: [
       {
-        path: '/report',
+        path: '/countrywide-overview',
         name: '全国疫情数据概览'
       }
     ]
@@ -128,10 +128,18 @@ const defaultActiveIndex = ref(route.path)
   background-clip: content-box; */
 }
 .wrapper {
-  height: 100%;
-  padding: 5px;
+  height: calc(100vh - 100px);
+  padding: 5px 10px 5px 5px;
   background-color: #fff;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  overflow-y: overlay;
+}
+.wrapper::-webkit-scrollbar {
+  width: 10px;
+}
+.wrapper::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  background-color: #cfcfcf;
 }
 .el-sub-menu .el-menu-item {
   min-width: 199px;

@@ -1,4 +1,4 @@
-// import store from '@/store'
+import store from '@/store'
 import axios from 'axios'
 // import { ElMessage } from 'element-plus'
 
@@ -10,7 +10,8 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     if (config.url !== '/login') {
-      const token = sessionStorage.getItem('token')
+      const token = store.getters.token
+      console.log(token)
       if (token) {
         config.headers['Authorization'] = 'Bearer ' + token
       }

@@ -14,7 +14,7 @@
 
 <script setup>
 import { useRouter } from 'vue-router'
-import Covid from './Covid.vue'
+import Covid from './covid.vue'
 const router = useRouter()
 
 const createReport = () => {

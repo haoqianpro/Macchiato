@@ -1,74 +1,13 @@
 <template>
-  <div class="canvas">
+  <div class="board">
     <div class="tabContent">
-      <div style="background-color: rgb(255, 250, 247)">
-        <p style="color: rgb(229, 118, 49)">
-          +{{
-            data.diseaseh5Shelf && data.diseaseh5Shelf.chinaAdd.localConfirmH5
-          }}
-        </p>
-        <p>本土确诊</p>
-      </div>
-      <div style="background-color: rgb(254, 247, 255)">
-        <p style="color: rgb(202, 63, 129)">
-          +{{ data.diseaseh5Shelf && data.diseaseh5Shelf.chinaAdd.noInfectH5 }}
-        </p>
-        <p>本土无症状</p>
-      </div>
-      <div style="background-color: rgb(255, 244, 244)">
-        <p style="color: rgb(190, 33, 33)">
-          +{{
-            data.diseaseh5Shelf && data.diseaseh5Shelf.chinaTotal.confirmAdd
-          }}
-        </p>
-        <p>确诊病例</p>
-      </div>
-      <div style="background-color: rgb(255, 250, 247)">
-        <p style="color: rgb(229, 118, 49)">
-          {{
-            data.diseaseh5Shelf && data.diseaseh5Shelf.chinaTotal.localConfirm
-          }}
-        </p>
-        <p>现有本土确诊</p>
-      </div>
-      <div style="background-color: rgb(254, 247, 255)">
-        <p style="color: rgb(202, 63, 129)">
-          {{
-            data.diseaseh5Shelf && data.diseaseh5Shelf.chinaTotal.nowLocalWzz
-          }}
-        </p>
-
-        <p>现有本土无症状</p>
-      </div>
-      <div style="background-color: rgb(255, 244, 244)">
-        <p style="color: rgb(190, 33, 33)">
-          {{ data.diseaseh5Shelf && data.diseaseh5Shelf.chinaTotal.nowConfirm }}
-        </p>
-        <p>现有确诊病例</p>
-      </div>
-      <div style="background-color: rgb(255, 247, 247)">
-        <p style="color: rgb(242, 58, 59)">
-          {{
-            data.diseaseh5Shelf &&
-            data.diseaseh5Shelf.chinaTotal.highRiskAreaNum
-          }}
-        </p>
-        <p>高风险地区</p>
-      </div>
-      <div style="background-color: rgb(255, 250, 247)">
-        <p style="color: rgb(240, 89, 38)">
-          {{
-            data.diseaseh5Shelf &&
-            data.diseaseh5Shelf.chinaTotal.mediumRiskAreaNum
-          }}
-        </p>
-        <p>中风险地区</p>
-      </div>
-      <div style="background-color: rgb(243, 246, 248)">
-        <p style="color: rgb(78, 90, 101)">
-          {{ data.diseaseh5Shelf && data.diseaseh5Shelf.chinaTotal.dead }}
-        </p>
-        <p>累计死亡</p>
+      <div
+        v-for="(item, index) in tabList"
+        :key="index"
+        :style="{ 'background-color': item.backgroundColor }"
+      >
+        <p :style="{ color: item.color }">+{{ item.data }}</p>
+        <p>{{ item.label }}</p>
       </div>
     </div>
 
@@ -103,10 +42,39 @@ import 'echarts/lib/component/geo'
 import 'echarts/lib/component/markLine'
 import 'echarts/lib/component/title'
 import 'echarts/lib/component/tooltip'
+// 疫情数据
 const data = ref({})
-// const lineData = ref({})
 const chinaDayAddListNew = reactive([])
 const chinaDayListNew = reactive([])
+// tab 数据列表
+const tabList = reactive([])
+// 表格列表
+const chartList = reactive([
+  {
+    containerId: 'chart1',
+    title: '全国新增本土确诊',
+    arr: chinaDayAddListNew,
+    dataKey: 'localConfirmadd'
+  },
+  {
+    containerId: 'chart2',
+    title: '全国新增本土无症状',
+    arr: chinaDayAddListNew,
+    dataKey: 'localinfectionadd'
+  },
+  {
+    containerId: 'chart3',
+    title: '全国现有本土确诊',
+    arr: chinaDayListNew,
+    dataKey: 'localConfirmH5'
+  },
+  {
+    containerId: 'chart4',
+    title: '全国现有本土无症状',
+    arr: chinaDayListNew,
+    dataKey: 'noInfectH5'
+  }
+])
 
 const drawMap = () => {
   // 基于准备好的dom，初始化echarts实例
@@ -190,26 +158,26 @@ const drawMap = () => {
         geoIndex: 0,
         data: data.value.diseaseh5Shelf.areaTree[0].children.map(item => ({
           name: item.name,
-          value: item.children[0].today.local_confirm_add
+          value: item.today.local_confirm_add
         }))
       }
     ]
   })
 }
 
-const drawChart1 = () => {
-  echarts.dispose(document.getElementById('chart1'))
-  const chart = echarts.init(document.getElementById('chart1'))
+const drawChart = (containerId, title, arr, dataKey) => {
+  echarts.dispose(document.getElementById(containerId))
+  const chart = echarts.init(document.getElementById(containerId))
   const option = {
     title: {
       show: true,
-      text: '全国新增本土确诊',
+      text: title,
       top: 'auto',
       x: 'center'
     },
     xAxis: {
       type: 'category',
-      data: chinaDayAddListNew.map(item => item.date)
+      data: arr.map(item => item.date)
     },
     yAxis: {
       type: 'value'
@@ -222,7 +190,7 @@ const drawChart1 = () => {
     },
     series: [
       {
-        data: chinaDayAddListNew.map(item => item.localConfirmadd),
+        data: arr.map(item => item[dataKey]),
         type: 'line',
         smooth: true
       }
@@ -231,133 +199,91 @@ const drawChart1 = () => {
   chart.setOption(option)
 }
 
-const drawChart2 = () => {
-  echarts.dispose(document.getElementById('chart2'))
-  const chart = echarts.init(document.getElementById('chart2'))
-  const option = {
-    title: {
-      show: true,
-      text: '全国新增本土无症状',
-      top: 'auto',
-      x: 'center'
-    },
-    xAxis: {
-      type: 'category',
-      data: chinaDayAddListNew.map(item => item.date)
-    },
-    yAxis: {
-      type: 'value'
-    },
-    grid: {
-      top: 30,
-      bottom: 24,
-      left: 45,
-      right: 10
-    },
-    series: [
-      {
-        data: chinaDayAddListNew.map(item => item.localinfectionadd),
-        type: 'line',
-        smooth: true
-      }
-    ]
-  }
-  chart.setOption(option)
-}
-
-const drawChart3 = () => {
-  echarts.dispose(document.getElementById('chart3'))
-  const chart = echarts.init(document.getElementById('chart3'))
-  const option = {
-    title: {
-      show: true,
-      text: '全国现有本土确诊',
-      top: 'auto',
-      x: 'center'
-    },
-    xAxis: {
-      type: 'category',
-      data: chinaDayListNew.map(item => item.date)
-    },
-    yAxis: {
-      type: 'value'
-    },
-    grid: {
-      top: 30,
-      bottom: 24,
-      left: 45,
-      right: 10
-    },
-    series: [
-      {
-        data: chinaDayListNew.map(item => item.localConfirmH5),
-        type: 'line',
-        smooth: true
-      }
-    ]
-  }
-  chart.setOption(option)
-}
-
-const drawChart4 = () => {
-  echarts.dispose(document.getElementById('chart4'))
-  const chart = echarts.init(document.getElementById('chart4'))
-  const option = {
-    title: {
-      show: true,
-      text: '全国现有本土无症状',
-      top: 'auto',
-      x: 'center'
-    },
-    xAxis: {
-      type: 'category',
-      data: chinaDayListNew.map(item => item.date)
-    },
-    yAxis: {
-      type: 'value'
-    },
-    grid: {
-      top: 30,
-      bottom: 24,
-      left: 45,
-      right: 10
-    },
-    series: [
-      {
-        data: chinaDayListNew.map(item => item.noInfectH5),
-        type: 'line',
-        smooth: true
-      }
-    ]
-  }
-  chart.setOption(option)
-}
-
+// 生成方块列表 绘制图表
 onMounted(() => {
   getOnsInfo().then(res => {
     data.value = res.data
+    tabList.push(
+      ...[
+        {
+          data: data.value.diseaseh5Shelf.chinaAdd.localConfirmH5,
+          label: '本土确诊',
+          backgroundColor: 'rgb(255, 250, 247)',
+          color: 'rgb(229, 118, 49)'
+        },
+        {
+          data: data.value.diseaseh5Shelf.chinaAdd.noInfectH5,
+          backgroundColor: 'rgb(254, 247, 255)',
+          color: 'rgb(202, 63, 129)',
+          label: '本土无症状'
+        },
+        {
+          data: data.value.diseaseh5Shelf.chinaTotal.confirmAdd,
+          backgroundColor: 'rgb(255, 244, 244)',
+          color: 'rgb(190, 33, 33)',
+          label: '确诊病例'
+        },
+        {
+          data: data.value.diseaseh5Shelf.chinaTotal.localConfirm,
+          backgroundColor: 'rgb(255, 250, 247)',
+          color: 'rgb(229, 118, 49)',
+          label: '现有本土确诊'
+        },
+        {
+          data: data.value.diseaseh5Shelf.chinaTotal.nowLocalWzz,
+          backgroundColor: 'rgb(254, 247, 255)',
+          color: 'rgb(202, 63, 129)',
+          label: '现有本土无症状'
+        },
+        {
+          data: data.value.diseaseh5Shelf.chinaTotal.nowConfirm,
+          backgroundColor: 'rgb(255, 244, 244)',
+          color: 'rgb(190, 33, 33)',
+          label: '现有确诊病例'
+        },
+        {
+          data: data.value.diseaseh5Shelf.chinaTotal.highRiskAreaNum,
+          backgroundColor: 'rgb(255, 247, 247)',
+          color: 'rgb(242, 58, 59)',
+          label: '高风险地区'
+        },
+        {
+          data: data.value.diseaseh5Shelf.chinaTotal.mediumRiskAreaNum,
+          backgroundColor: 'rgb(255, 250, 247)',
+          color: 'rgb(240, 89, 38)',
+          label: '中风险地区'
+        },
+        {
+          data: data.value.diseaseh5Shelf.chinaTotal.dead,
+          backgroundColor: 'rgb(243, 246, 248)',
+          color: 'rgb(78, 90, 101)',
+          label: '累计死亡'
+        }
+      ]
+    )
     drawMap()
   })
   getLine().then(res => {
     chinaDayAddListNew.push(...res.data.chinaDayAddListNew)
     chinaDayListNew.push(...res.data.chinaDayListNew)
-    drawChart1()
-    drawChart2()
-    drawChart3()
-    drawChart4()
+    chartList.forEach(item =>
+      drawChart(item.containerId, item.title, item.arr, item.dataKey)
+    )
   })
 })
 </script>
 
 <style scoped>
-.canvas {
+.board {
+  height: 100%;
+  padding: 8px;
   display: flex;
   flex-direction: column;
 }
 .map-container {
   flex: 1;
   width: 640px;
-  height: 400px;
+  height: 460px;
 }
 .grid {
   display: flex;
@@ -369,7 +295,7 @@ onMounted(() => {
 }
 .chart {
   width: 310px;
-  height: 210px;
+  height: 230px;
   margin-bottom: 5px;
 }
 .tabContent {
