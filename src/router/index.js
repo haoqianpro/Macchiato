@@ -24,12 +24,23 @@ const routes = [
       }
     ]
   },
-  { path: '/login', component: Login }
+  { path: '/login', name: 'login', component: Login }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
+// 路由守卫
+// router.beforeEach((to, from, next) => {
+//   if (to.name !== 'login' && !store.state.user) {
+//     next('/login')
+//   } else if (to.name === 'login' && store.state.user) {
+//     next('/index')
+//   } else {
+//     next()
+//   }
+// })
 
 export default router

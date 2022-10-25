@@ -40,8 +40,22 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useStore } from 'vuex'
 import NavHeader from '../../components/NavHeader.vue'
+const store = useStore()
+// 报表列表
+const reportList = reactive([
+  {
+    path: '/countrywide-overview',
+    name: '全国疫情数据概览'
+  }
+])
+const reportMenus =
+  store.state.user?.report ||
+  ''.split(',').map(item => reportList.find(report => report.name === item))
+console.log(reportMenus)
 
+// 菜单列表
 const menuItemList = reactive([
   {
     icon: 'Grid',

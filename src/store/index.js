@@ -19,11 +19,13 @@ export default createStore({
     },
     REMOVE_TOKEN: state => {
       state.token = null
-    },
-    LOGOUT: () => {
-      this.REMOVE_USER()
-      this.REMOVE_TOKEN()
     }
   },
-  getters
+  getters,
+  actions: {
+    LOGOUT: context => {
+      context.commit('REMOVE_USER')
+      context.commit('REMOVE_TOKEN')
+    }
+  }
 })

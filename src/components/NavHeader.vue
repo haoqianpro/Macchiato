@@ -2,11 +2,17 @@
   <div class="nav-header">
     <div class="logo">Macchiato</div>
     <div class="avatar">
-      <el-dropdown>
-        <img :src="defaultAvatar" alt="avatar" />
+      <el-dropdown @command="handleCommand">
+        <img
+          :src="store.state.user?.avatar_url || defaultAvatar"
+          alt="avatar"
+        />
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item>退出登录</el-dropdown-item>
+            <el-dropdown-item>{{
+              store.state.user?.username
+            }}</el-dropdown-item>
+            <el-dropdown-item command="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -15,7 +21,21 @@
 </template>
 
 <script setup>
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import defaultAvatar from '../assets/default-avatar.gif'
+
+const store = useStore()
+const router = useRouter()
+
+const handleCommand = command => {
+  if (command === 'logout') {
+    ElMessage.success('退出登录成功,请重新登录')
+    router.push('/login')
+    store.dispatch('LOGOUT')
+  }
+}
 </script>
 
 <style scoped>
