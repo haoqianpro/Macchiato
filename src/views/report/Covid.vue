@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <div class="grid">
+    <div class="chartBox">
       <div class="column column1">
         <div class="chart" id="chart1"></div>
         <div class="chart" id="chart2"></div>
@@ -199,6 +199,19 @@ const drawChart = (containerId, title, arr, dataKey) => {
   chart.setOption(option)
 }
 
+function format(num) {
+  num = String(num)
+  if (num.length <= 3) return num
+  const n = num.length % 3
+  if (n > 0) {
+    return (
+      num.slice(0, n) + ',' + num.slice(n, num.length).match(/\d{3}/g).join(',')
+    )
+  } else {
+    return num.slice(n, num.length).match(/\d{3}/g).join(',')
+  }
+}
+
 // 生成方块列表 绘制图表
 onMounted(() => {
   getOnsInfo().then(res => {
@@ -206,55 +219,55 @@ onMounted(() => {
     tabList.push(
       ...[
         {
-          data: data.value.diseaseh5Shelf.chinaAdd.localConfirmH5,
+          data: format(data.value.diseaseh5Shelf.chinaAdd.localConfirmH5),
           label: '本土确诊',
           backgroundColor: 'rgb(255, 250, 247)',
           color: 'rgb(229, 118, 49)'
         },
         {
-          data: data.value.diseaseh5Shelf.chinaAdd.noInfectH5,
+          data: format(data.value.diseaseh5Shelf.chinaAdd.noInfectH5),
           backgroundColor: 'rgb(254, 247, 255)',
           color: 'rgb(202, 63, 129)',
           label: '本土无症状'
         },
         {
-          data: data.value.diseaseh5Shelf.chinaTotal.confirmAdd,
+          data: format(data.value.diseaseh5Shelf.chinaTotal.confirmAdd),
           backgroundColor: 'rgb(255, 244, 244)',
           color: 'rgb(190, 33, 33)',
           label: '确诊病例'
         },
         {
-          data: data.value.diseaseh5Shelf.chinaTotal.localConfirm,
+          data: format(data.value.diseaseh5Shelf.chinaTotal.localConfirm),
           backgroundColor: 'rgb(255, 250, 247)',
           color: 'rgb(229, 118, 49)',
           label: '现有本土确诊'
         },
         {
-          data: data.value.diseaseh5Shelf.chinaTotal.nowLocalWzz,
+          data: format(data.value.diseaseh5Shelf.chinaTotal.nowLocalWzz),
           backgroundColor: 'rgb(254, 247, 255)',
           color: 'rgb(202, 63, 129)',
           label: '现有本土无症状'
         },
         {
-          data: data.value.diseaseh5Shelf.chinaTotal.nowConfirm,
+          data: format(data.value.diseaseh5Shelf.chinaTotal.nowConfirm),
           backgroundColor: 'rgb(255, 244, 244)',
           color: 'rgb(190, 33, 33)',
           label: '现有确诊病例'
         },
         {
-          data: data.value.diseaseh5Shelf.chinaTotal.highRiskAreaNum,
+          data: format(data.value.diseaseh5Shelf.chinaTotal.highRiskAreaNum),
           backgroundColor: 'rgb(255, 247, 247)',
           color: 'rgb(242, 58, 59)',
           label: '高风险地区'
         },
         {
-          data: data.value.diseaseh5Shelf.chinaTotal.mediumRiskAreaNum,
+          data: format(data.value.diseaseh5Shelf.chinaTotal.mediumRiskAreaNum),
           backgroundColor: 'rgb(255, 250, 247)',
           color: 'rgb(240, 89, 38)',
           label: '中风险地区'
         },
         {
-          data: data.value.diseaseh5Shelf.chinaTotal.dead,
+          data: format(data.value.diseaseh5Shelf.chinaTotal.dead),
           backgroundColor: 'rgb(243, 246, 248)',
           color: 'rgb(78, 90, 101)',
           label: '累计死亡'
@@ -285,7 +298,7 @@ onMounted(() => {
   width: 640px;
   height: 460px;
 }
-.grid {
+.chartBox {
   display: flex;
   flex: 1;
 }

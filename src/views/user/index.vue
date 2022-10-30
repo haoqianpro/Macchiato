@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="user-wrapper">
     <header class="header">
       <el-form :inline="true" :model="queryConfig" class="demo-form-inline">
         <el-form-item label="姓名: ">
@@ -108,13 +108,13 @@
   </div>
 </template>
 <script setup>
-import { reactive, ref, onMounted } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import {
-  getUserInfo,
-  getRole,
   addUser,
   deleteUserInfo,
-  editUser
+  editUser,
+  getRole,
+  getUserInfo
 } from '../../api/user.js'
 // import { ElMessage } from 'element-plus'
 
@@ -250,6 +250,9 @@ const clearName = () => {
 }
 </script>
 <style scoped>
+.user-wrapper {
+  padding: 20px;
+}
 .header {
   margin-top: 10px;
 }

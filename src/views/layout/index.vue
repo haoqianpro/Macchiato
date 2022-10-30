@@ -48,11 +48,17 @@ const reportList = reactive([
   {
     path: '/countrywide-overview',
     name: '全国疫情数据概览'
+  },
+  {
+    path: '/countrywide-overview-2',
+    name: '全国疫情数据概览Ⅱ'
   }
 ])
-const reportMenus =
-  store.state.user?.report ||
-  ''.split(',').map(item => reportList.find(report => report.name === item))
+const reportMenus = store.state.user?.report
+  ? store.state.user.report
+      .split(',')
+      .map(item => reportList.find(report => report.name === item))
+  : []
 console.log(reportMenus)
 
 // 菜单列表
@@ -87,12 +93,7 @@ const menuItemList = reactive([
     icon: 'Memo',
     path: '/sub-menu3',
     name: '报表',
-    children: [
-      {
-        path: '/countrywide-overview',
-        name: '全国疫情数据概览'
-      }
-    ]
+    children: reportMenus
   }
 ])
 const route = useRoute()

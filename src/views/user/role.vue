@@ -101,7 +101,7 @@ const roleForm = reactive({
 })
 
 // 报表列表
-const reportList = reactive(['全国疫情数据概览'])
+const reportList = reactive(['全国疫情数据概览', '全国疫情数据概览Ⅱ'])
 
 // 对话框显示隐藏变量
 const dialogVisible = ref(false)
