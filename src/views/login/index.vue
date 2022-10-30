@@ -32,8 +32,11 @@ import { login } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 
 const ruleFormRef = ref('')
+const store = useStore()
+// const state = store.state
 const ruleForm = reactive({
   username: '',
   password: ''
@@ -74,6 +77,9 @@ const submit = () => {
       } else if (res.message == '用户不存在') {
         ElMessage('用户不存在')
       } else {
+        // 将token和用户存储到vuex中并跳转至首页
+        store.commit('SET_TOKEN', res.data.token)
+        store.commit('SET_USER', res.data.user)
         router.push('/index')
       }
     } else {
