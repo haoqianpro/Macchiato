@@ -3,8 +3,7 @@
     <el-card class="box-card">
       <template #header>
         <div class="card-header">
-          <h1>登录</h1>
-          <el-button class="button" text>注册</el-button>
+          <h1>用户登录</h1>
         </div>
       </template>
       <el-form :model="ruleForm" :rules="rules" ref="ruleFormRef">
@@ -30,11 +29,10 @@
 
 <script setup>
 import { login } from '@/api/user'
+import { ElMessage } from 'element-plus'
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 
-// const username = ref('')
-// const password = ref('')
 const ruleFormRef = ref('')
 const ruleForm = reactive({
   username: '',
@@ -63,24 +61,21 @@ const resetForm = () => {
   ruleFormRef.value.resetFields()
 }
 
-// const submit = () => {
-//   login(ruleForm.username.value, ruleForm.password.value).then(res => {
-//     if (res.status === 'ok') {
-//       router.push('/index')
-//     } else {
-//       alert(res.msg)
-//     }
-//   })
-// }
-
-// 登陆成功跳转
-const submit = ruleForm => {
-  ruleForm.validate(async (valid, fields) => {
+// 登陆成功跳转 错误提示
+const submit = () => {
+  ruleFormRef.value.validate(async (valid, fields) => {
     if (valid) {
-      console.log('success')
-      let res = await login(ruleForm)
-      console.log(res, 'ceshi')
-      router.push('/index')
+      let res = await login(ruleForm.username, ruleForm.password)
+      console.log(res)
+      if (res.message == '密码错误') {
+        ElMessage('密码错误')
+        console.log(res)
+        console.log(ruleForm.username, ruleForm.password)
+      } else if (res.message == '用户不存在') {
+        ElMessage('用户不存在')
+      } else {
+        router.push('/index')
+      }
     } else {
       console.log('error', fields)
     }
@@ -88,18 +83,23 @@ const submit = ruleForm => {
 }
 </script>
 
-<style scoped>
+<style>
 .body {
   width: 100%;
-  background-color: #ffffff;
+  background: url(./loginBg.jpg) no-repeat;
 }
 
 .box-card {
   height: 400px;
   width: 450px;
   margin: 100px auto 0;
-  background-color: #ffffff;
-  box-shadow: 10px 10px 10px #d9ecff, -10px -10px 10px #ecf5ff;
+  background-color: rgba(123, 163, 224, 0.5);
+  border-radius: 20px;
+  color: #000000;
+}
+
+.el-form-item__label {
+  color: #000000;
 }
 
 .card-header {
